@@ -1,0 +1,63 @@
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Frontend ###
+frontend/node_modules/
+frontend/build/
+
+### Local configuration and generated course artifacts ###
+.env
+.env.*
+*.session.sql
+*.bak
+*.zip
+*.pdf
+*.doc
+*.png
+src/debug.log
+src/codex-backups/
+src/main/resources/public.backup-*/
+src/main/resources/public/**/*.map
+notes/
+
+### Personal and redundant local materials ###
+CREATE TABLE public.sql
+src/AWS_Frontend_Integration_Notes_CN.md
+src/Graduate_Application_Questionnaire_2027_Fall.md
+src/Graduate_Application_Questionnaire_2027_Fall_CN.md
+src/main/repository/

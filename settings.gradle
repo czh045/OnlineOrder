@@ -1,0 +1,3 @@
+// rootProject.name 定义 Gradle 根项目名称。
+// 这个名字会显示在构建和 IDE 里。
+rootProject.name = 'OnlineOrder'

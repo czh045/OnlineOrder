@@ -1,0 +1,123 @@
+{
+  "info": {
+    "_postman_id": "03d5cffa-7495-4740-8a0f-a46036c83249",
+    "name": "Controllers",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "26128091"
+  },
+  "item": [
+    {
+      "name": "Cart",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/cart",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "cart"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Checkout",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/cart/checkout",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "cart",
+            "checkout"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add to Cart",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"menu_id\": 4\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/cart",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "cart"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Menu by Restaurant",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/restaurant/1/menu",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "restaurant",
+            "1",
+            "menu"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Menu for All Restaurants",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/restaurants/menu",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "restaurants",
+            "menu"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

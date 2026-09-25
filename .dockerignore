@@ -1,0 +1,13 @@
+.git
+.gradle
+build
+bin
+frontend/node_modules
+frontend/build
+notes
+src/codex-backups
+src/main/resources/public.backup-*
+*.pdf
+*.doc
+*.png
+*.session.sql

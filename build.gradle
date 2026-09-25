@@ -1,0 +1,67 @@
+// plugins 块声明这个项目要用哪些 Gradle 插件。
+plugins {
+    // java 插件让项目支持 Java 编译、测试和打包。
+    id 'java'
+
+    // Spring Boot 插件提供 bootRun、bootJar 等任务。
+    id 'org.springframework.boot' version '4.1.0'
+
+    // dependency-management 插件帮助统一管理依赖版本。
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+// group 类似包名的组织前缀。
+group = 'com.laioffer'
+
+// version 表示项目版本号。
+version = '0.0.1-SNAPSHOT'
+
+// description 是项目描述。
+description = 'OnlineOrder'
+
+// java 块配置使用的 Java 版本。
+java {
+    toolchain {
+        // 这里要求 Java 21。
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+// repositories 表示依赖从哪里下载。
+repositories {
+    // mavenCentral 是最常用的公共 Maven 仓库。
+    mavenCentral()
+}
+
+// dependencies 块列出项目需要的依赖。
+dependencies {
+    // spring-boot-starter-webmvc 提供 Spring MVC、Tomcat、HTTP 接口支持。
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+
+    // spring-boot-starter-data-jdbc 提供 Spring Data JDBC，用来访问数据库。
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+
+    // spring-boot-starter-security 提供登录、登出、密码加密和权限控制。
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // spring-boot-starter-cache 提供缓存注解支持。
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+
+    // caffeine 是课程里使用的本地缓存实现。
+    // application.yaml 里的 spring.cache.caffeine.spec 会配置它的过期时间。
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.+'
+
+    // PostgreSQL JDBC 驱动只在运行时需要，不参与编译。
+    runtimeOnly 'org.postgresql:postgresql:42.7.7'
+
+    // Spring Boot Web MVC 测试相关依赖。
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+
+    // JUnit 平台启动器。
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+// 这里配置 test 任务使用 JUnit Platform。
+tasks.named('test') {
+    useJUnitPlatform()
+}
