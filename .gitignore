@@ -51,6 +51,8 @@ frontend/build/
 *.png
 src/debug.log
 src/codex-backups/
+src/.codex-backups/
+src/.gradle-user/
 src/main/resources/public.backup-*/
 src/main/resources/public/**/*.map
 notes/

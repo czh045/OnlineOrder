@@ -37,7 +37,6 @@ public class CartService {
         this.orderItemRepository = orderItemRepository;
     }
 
-    // 保留课程旧接口，旧版 Postman 请求仍可正常“加一件”。
     public void addMenuItemToCart(long customerId, long menuItemId) {
         addMenuItemToCart(customerId, menuItemId, 1);
     }
@@ -142,7 +141,6 @@ public class CartService {
         return cart;
     }
 
-    // 先从当前用户自己的购物车取 cartId，再核验目标行的归属，避免猜 ID 越权改别人的购物车。
     private OrderItemEntity getOwnedOrderItem(CartEntity cart, long orderItemId) {
         OrderItemEntity orderItem = orderItemRepository.findById(orderItemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cart item " + orderItemId + " not found"));

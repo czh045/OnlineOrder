@@ -1,76 +1,37 @@
-# spring 是 Spring Boot 的主配置节点。
 spring:
-  # application 用来配置应用本身的信息。
   application:
-    # name 是应用名，日志里会显示 OnlineOrder。
     name: OnlineOrder
 
-  # datasource 是数据库连接配置。
   datasource:
-    # url 是 PostgreSQL JDBC 连接地址。
-    # ${DB_HOST:${DATABASE_URL:localhost}} 的意思是：
-    # 1. 优先读环境变量 DB_HOST；
-    # 2. 如果没有 DB_HOST，就读 DATABASE_URL；
-    # 3. 如果两个都没有，就用 localhost。
-    # 这让同一套代码既能本地运行，也能在 Docker/AWS 环境运行。
     url: jdbc:postgresql://${DB_HOST:${DATABASE_URL:localhost}}:${DB_PORT:${DATABASE_PORT:5432}}/${DB_NAME:${DATABASE_NAME:onlineorder}}
 
-    # 数据库用户名。
-    # 本地默认是 postgres，也可以通过 DB_USERNAME 或 DATABASE_USERNAME 覆盖。
     username: ${DB_USERNAME:${DATABASE_USERNAME:postgres}}
 
-    # 数据库密码。
-    # 本地默认是 secret，也可以通过 DB_PASSWORD 或 DATABASE_PASSWORD 覆盖。
     password: ${DB_PASSWORD:${DATABASE_PASSWORD:secret}}
 
-    # PostgreSQL JDBC 驱动类名。
     driver-class-name: org.postgresql.Driver
 
-  # sql.init 控制 Spring Boot 启动时是否执行 SQL 初始化脚本。
   sql:
-    # init 是初始化 SQL 的配置组。
     init:
-      # mode 控制是否执行初始化脚本。
-      # always 表示每次启动都执行。
-      # 这个项目里默认 always，方便课程里反复重建表。
       mode: ${SPRING_SQL_INIT_MODE:always}
 
-      # schema-locations 指定初始化脚本位置。
-      # classpath:database-init.sql 表示 src/main/resources/database-init.sql。
       schema-locations: classpath:database-init.sql
 
-  # jackson 控制 Java 对象和 JSON 之间的转换。
   jackson:
-    # non_null 表示返回 JSON 时，值为 null 的字段不返回。
-    # 这样前端看到的 JSON 更干净。
     default-property-inclusion: non_null
 
-    # SNAKE_CASE 表示 Java 字段 firstName 会转成 JSON 字段 first_name。
-    # 这和前端、Postman 里常见的 snake_case 风格保持一致。
     property-naming-strategy: SNAKE_CASE
 
-  # cache 配置缓存实现的行为。
-  # 项目里的 RestaurantService 和 CartService 用了 @Cacheable/@CacheEvict。
   cache:
-    # caffeine 是课程里使用的本地缓存库。
     caffeine:
-      # expireAfterWrite=60s 表示缓存写入 60 秒后自动过期。
-      # 这样既能减少重复查询，也能避免旧数据长期留在缓存里。
       spec: expireAfterWrite=60s
 
-# logging 控制日志级别。
 logging:
-  # level 表示针对不同包设置不同日志详细程度。
   level:
-    # TRACE 会输出非常详细的 HTTP 请求解析日志。
-    # 上课调试请求时有用，生产环境一般不要开这么细。
     org.apache.coyote.http11.Http11InputBuffer: INFO
 
-    # DEBUG 会显示 SQL 初始化脚本执行过程。
     org.springframework.jdbc.datasource.init: DEBUG
 
-    # DEBUG 会显示 Spring JDBC 执行 SQL 的日志。
     org.springframework.jdbc.core: DEBUG
 
-    # DEBUG 会显示 Spring Web 处理请求的过程。
     org.springframework.web: DEBUG

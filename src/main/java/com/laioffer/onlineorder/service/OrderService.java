@@ -36,7 +36,6 @@ public class OrderService {
         this.paymentMethodRepository = paymentMethodRepository;
     }
 
-    // 创建订单、复制购物车快照和清空购物车必须在同一事务中完成。
     @Transactional
     public OrderDto checkout(long customerId, long paymentMethodId) {
         PaymentMethodEntity paymentMethod = getOwnedPaymentMethod(customerId, paymentMethodId);

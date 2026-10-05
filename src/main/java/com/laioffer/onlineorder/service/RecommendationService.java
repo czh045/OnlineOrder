@@ -11,8 +11,6 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-// 不依赖付费 API 的本地推荐：按菜名/描述关键词和预算过滤真实菜单项。
-// 后续接入大模型时，可以保留此层作为候选集检索和无 API Key 时的降级方案。
 @Service
 public class RecommendationService {
 

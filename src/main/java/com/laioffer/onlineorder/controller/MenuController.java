@@ -40,7 +40,6 @@ public class MenuController {
         return restaurantService.getRestaurants();
     }
 
-    // 下列写接口会被 AppConfig 中的 hasRole("ADMIN") 规则保护。
     @PostMapping("/restaurants")
     @ResponseStatus(HttpStatus.CREATED)
     public RestaurantEntity createRestaurant(@RequestBody RestaurantRequestBody body) {

@@ -1,9 +1,4 @@
--- database-init.sql 会在 Spring Boot 启动时自动执行。
--- 它的作用是创建数据库表，并插入一些餐厅和菜单的演示数据。
 
--- 先删旧表，保证每次启动时都能重新初始化一套干净的数据。
--- 注意删除顺序：先删子表，再删父表。
--- 例如 order_items 依赖 menu_items 和 carts，所以必须先删 order_items。
 DROP TABLE IF EXISTS order_line_items;
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS payment_methods;
@@ -14,77 +9,49 @@ DROP TABLE IF EXISTS carts;
 DROP TABLE IF EXISTS authorities;
 DROP TABLE IF EXISTS customers;
 
--- 用户主表：存登录邮箱、密码、是否启用，以及姓名信息。
 CREATE TABLE customers
 (
-    -- id 是主键。
-    -- SERIAL 表示 PostgreSQL 自动生成递增整数。
     id SERIAL PRIMARY KEY,
 
-    -- email 是用户登录名。
-    -- UNIQUE 表示不能重复，NOT NULL 表示不能为空。
     email TEXT UNIQUE NOT NULL,
 
-    -- enabled 是 Spring Security 要用的字段。
-    -- TRUE 表示账号启用，FALSE 表示账号禁用。
     enabled BOOLEAN DEFAULT TRUE NOT NULL,
 
-    -- password 存加密后的密码。
-    -- 不要把明文密码存数据库。
     password TEXT NOT NULL,
 
-    -- first_name 是用户名字。
     first_name TEXT,
 
-    -- last_name 是用户姓氏。
     last_name TEXT
 );
 
--- 权限表：Spring Security 用它来判断用户角色。
 CREATE TABLE authorities
 (
-    -- 权限记录自己的主键。
     id SERIAL PRIMARY KEY,
 
-    -- email 对应 customers.email。
-    -- Spring Security 默认会用 username 查权限，这里 username 就是 email。
     email TEXT NOT NULL,
 
-    -- authority 表示权限，比如 ROLE_USER。
     authority TEXT NOT NULL,
 
-    -- 给这条外键约束起名字，方便数据库报错时定位。
     CONSTRAINT fk_authorities_customer
 
-        -- authorities.email 引用 customers.email。
-        -- ON DELETE CASCADE 表示删除用户时，自动删除他的权限记录。
         FOREIGN KEY (email) REFERENCES customers (email) ON DELETE CASCADE,
 
     CONSTRAINT uq_authorities_email_authority UNIQUE (email, authority)
 );
 
--- 每个用户只有一个购物车，所以 customer_id 设成 UNIQUE。
 CREATE TABLE carts
 (
-    -- 购物车主键。
     id SERIAL PRIMARY KEY,
 
-    -- customer_id 指向 customers.id。
-    -- UNIQUE 表示一个用户最多只有一个购物车。
     customer_id INTEGER UNIQUE NOT NULL,
 
-    -- total_price 表示购物车总价。
-    -- NUMERIC(10, 2) 表示最多 10 位数字，小数点后 2 位。
     total_price NUMERIC(10, 2) DEFAULT 0.00 NOT NULL,
 
-    -- carts.customer_id 到 customers.id 的外键约束。
     CONSTRAINT fk_carts_customer
 
-        -- 删除用户时，自动删除他的购物车。
         FOREIGN KEY (customer_id) REFERENCES customers (id) ON DELETE CASCADE
 );
 
--- 餐厅主表。
 CREATE TABLE payment_methods
 (
     id           SERIAL PRIMARY KEY,
@@ -100,51 +67,36 @@ CREATE TABLE payment_methods
 
 CREATE TABLE restaurants
 (
-    -- 餐厅主键。
     id SERIAL PRIMARY KEY,
 
-    -- 餐厅名称。
     name TEXT NOT NULL,
 
-    -- 餐厅地址。
     address TEXT NOT NULL,
 
-    -- 餐厅图片 URL。
     image_url TEXT,
 
-    -- 餐厅电话。
     phone TEXT
 );
 
--- 菜单表：一条菜单属于一家餐厅。
 CREATE TABLE menu_items
 (
-    -- 菜品主键。
     id SERIAL PRIMARY KEY,
 
-    -- restaurant_id 指向 restaurants.id。
     restaurant_id INTEGER NOT NULL,
 
-    -- 菜名。
     name TEXT NOT NULL,
 
-    -- 价格。
     price NUMERIC(10, 2) NOT NULL,
 
-    -- 菜品描述。
     description TEXT,
 
-    -- 菜品图片 URL。
     image_url TEXT,
 
-    -- 菜单到餐厅的外键约束。
     CONSTRAINT fk_menu_items_restaurant
 
-        -- 删除餐厅时，自动删除这家餐厅的菜单。
         FOREIGN KEY (restaurant_id) REFERENCES restaurants (id) ON DELETE CASCADE
 );
 
--- 订单项表：购物车里的每一行菜品。
 CREATE TABLE orders
 (
     id                SERIAL PRIMARY KEY,
@@ -175,37 +127,25 @@ CREATE TABLE order_line_items
 
 CREATE TABLE order_items
 (
-    -- 订单项主键。
     id SERIAL PRIMARY KEY,
 
-    -- menu_item_id 指向 menu_items.id，表示这行买的是哪道菜。
     menu_item_id INTEGER NOT NULL,
 
-    -- cart_id 指向 carts.id，表示这行商品属于哪个购物车。
     cart_id INTEGER NOT NULL,
 
-    -- price 是加入购物车时的单价。
     price NUMERIC(10, 2) NOT NULL,
 
-    -- quantity 是购买数量。
     quantity INTEGER NOT NULL,
 
-    -- 订单项到购物车的外键约束。
     CONSTRAINT fk_order_items_cart
 
-        -- 删除购物车时，自动删除它下面的订单项。
         FOREIGN KEY (cart_id) REFERENCES carts (id) ON DELETE CASCADE,
 
-    -- 订单项到菜单项的外键约束。
     CONSTRAINT fk_order_items_menu_item
 
-        -- 删除菜品时，自动删除引用它的订单项。
         FOREIGN KEY (menu_item_id) REFERENCES menu_items (id) ON DELETE CASCADE
 );
 
--- 插入餐厅演示数据。
--- INSERT INTO restaurants 后面的列顺序是 name、address、image_url、phone。
--- VALUES 里每一组括号就是一条餐厅记录。
 INSERT INTO restaurants (name, address, image_url, phone)
 VALUES
     (
@@ -227,9 +167,6 @@ VALUES
         '(408) 739-8866'
     );
 
--- 插入菜单演示数据。
--- INSERT INTO menu_items 后面的列顺序是 description、image_url、name、price、restaurant_id。
--- 所以每组值分别表示：描述、图片、菜名、价格、所属餐厅 ID。
 INSERT INTO menu_items (description, image_url, name, price, restaurant_id)
 VALUES
     (

@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-// Controller 抛出的常见业务异常统一返回稳定的 JSON 格式。
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
